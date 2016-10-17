@@ -1,6 +1,7 @@
 # HotWordDetection
 
-1. Hotword - 'Maya'
+Hotword - 'Maya'
+
 Training:
 1. Collect 10 samples of 'Maya'
 2. Compute MFCC (25ms window and 10ms hop) and store
