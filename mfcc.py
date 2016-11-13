@@ -2,34 +2,26 @@ import numpy as np
 from scipy.fftpack import dct
 import time
 import timeit
-alpha=0.95
-N=256
-MFCC_FRAME_LENGTH=200
-eps=10e-6
 
-mel_fb_weights=np.genfromtxt('mel_filters.csv',delimiter=',')
-mel_fb_sq_weights=mel_fb_weights**2
+class MFCC:
+        def __init__(self, alpha=0.95, N=256, fs=8000, eps=10e-6, frame_dur=0.025, hop_dur=0.01, mel_filter_file='mel_filters.csv'):
+                self.alpha = alpha   #Preemphasis parameter
+                self.N = N           # No of FFT points 
+                self.eps = eps       # eps to avoid mathematical errors
+                self.mfcc_frame_length = round(fs*frame_dur)  #frame length for mfcc
+                self.hop_length = round(hop_dur*fs)           #hop length for mfcc 
+                self.mel_fb_sq_weights = np.genfromtxt(mel_filter_file, delimiter=',')**2  #mel filter energies
 
-def preemphasis(input_frame,alpha):
-	return input_frame - alpha*np.concatenate((np.full(1, 0), input_frame[:-1]))
+        def compute_mfcc(self, input_frame):
+                self.windowed_frame = input_frame * np.hamming(len(input_frame)) #Hamming Windowing input frame
+                self.pre_frame = self.windowed_frame - self.alpha*np.concatenate((np.full(1, 0), self.windowed_frame[:-1])) #Preemphasis
+                self.fft_frame = np.fft.rfft(self.pre_frame,self.N) #Computing FFT
+                self.mel_frame = np.log(np.dot(self.mel_fb_sq_weights,(np.abs(self.fft_frame)**2)) + self.eps)  #Passing through mel and taking log
+                self.mel_frame_normalized = self.mel_frame / np.sum(self.mel_fb_sq_weights, axis=1)     #normalizing by filter energies
+                self.dct_frame = dct(self.mel_frame_normalized)     #Computing DCT 
+                return self.dct_frame[0:13]    # Returning first 13 DCT coefficients
 
-def windowing(input_frame):
-	return input_frame * np.hamming(len(input_frame))
-
-def compute_fft(input_frame):
-	return np.fft.rfft(input_frame,N)
-
-def mel_fb_pass(input_frame):
-	return np.log(np.dot(mel_fb_sq_weights,(np.abs(input_frame)**2)) + eps)
-
-def compute_dct(input_frame):
-	return dct(input_frame)
-
-start_time=time.time()
-#np.log(np.dot(np.random.random([23,200]),np.random.random(200)**2))
-y = compute_dct(mel_fb_pass(compute_fft(windowing(preemphasis(np.random.random(MFCC_FRAME_LENGTH),alpha)))))
-
+#temp = MFCC()
+#y = temp.compute_mfcc(np.random.random(200))
 #print(np.shape(y))
-print(time.time()-start_time)
-
-
+#print(y)
