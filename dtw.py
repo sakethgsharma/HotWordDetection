@@ -1,39 +1,41 @@
 import numpy as np
 import math
 
-def euclidianDistance(a,b)
-	return math.sqrt(a*a + b*b)
+def euclideanDistance(a,b):
+        return np.sqrt(np.abs(np.sum(np.dot(a,a) - np.dot(b,b))))
 
+def binaryDistance(a,b):
+        if(a != b):
+                return 1
+        else:
+                return 0
 
-def distance(a,b):
-	if(a != b):
-		return 1
-	else:
-		return 0
+class DTW:
+        def __init__(self, distFunc=euclideanDistance):
+                self.distFunc = distFunc 
 
-def dtwDistance(a,b):
-	if (type(a) is str):
-		a = list(a)
-	if (type(b) is str):
-		b = list(b)
-	if (type(a) is list):
-		a = np.array(a)
-	if (type(b) is list):
-		b = np.array(b)
-	DTW = np.empty([a.shape[0],b.shape[0]])
-	DTW[:] = np.inf
+        def compute_distance(self, reference, test):
+                if (type(reference) is str):
+	                reference = list(reference)
+        	if (type(test) is str):
+                	test = list(test)
+	        if (type(reference) is list):
+	                reference = np.array(reference)
+	        if (type(test) is list):
+	                test = np.array(test)
+	        DTW_matrix = np.empty([reference.shape[0],test.shape[0]])
+	        DTW_matrix[:] = np.inf
 
-	DTW[0,0] = 0
-	
-	for i in range(a.shape[0]):
-		for j in range(b.shape[0]):
-			cost = distance(a[i],b[j])
-			r_index = i-1
-			c_index = j-1
-			if(r_index < 0):
-				r_index = 0
-			if(c_index < 0):
-				c_index = 0
-			DTW[i,j] = cost + min(DTW[r_index,j],DTW[i,c_index],DTW[r_index,c_index])
-	return DTW[-1,-1]
+	        DTW_matrix[0,0] = 0
 
+	        for i in range(reference.shape[0]):
+	                for j in range(test.shape[0]):
+	                        cost =euclideanDistance(reference[i,:],test[j,:])
+	                        r_index = i-1
+	                        c_index = j-1
+	                        if(r_index < 0):
+	                                r_index = 0
+	                        if(c_index < 0):
+	                                c_index = 0
+	                        DTW_matrix[i,j] = cost + min(DTW_matrix[r_index,j],DTW_matrix[i,c_index],DTW_matrix[r_index,c_index])
+	        return DTW_matrix[-1,-1]/(test.shape[0]+reference.shape[0])
