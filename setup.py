@@ -6,6 +6,7 @@ setup(name='hotword_detection',
       author='Prakhar Swarup, Saketh Sharma, Hitesh Tulsiani',
       author_email='prkhrswrp@gmail.com',
       license='IITB',
+      scripts=['bin/checkHotword.py','bin/trainHotword.py'],
       url='https://github.com/sakethgsharma/HotWordDetection',
       packages=['hotword_detection'],
       install_requires=[
