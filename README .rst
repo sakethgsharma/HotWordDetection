@@ -29,35 +29,25 @@ Supported features:
 
 - Mel Frequency Cepstral Coefficients
 - Choice of selecting any suitable hot word
+- Supports variable sampling frequencies
+- Personalization using automatic DTW thresholding
 
 MFCC Features
 =============
 
-The default parameters should work fairly well for most cases, 
-if you want to change the MFCC parameters, the following parameters are supported::
-
-	python
-	def mfcc(signal,samplerate=16000,winlen=0.025,winstep=0.01,numcep=13,
-			 nfilt=26,nfft=512,lowfreq=0,highfreq=None,preemph=0.97,
-             ceplifter=22,appendEnergy=True)
-
-=============	===========
-Parameter 		Description
-=============	===========
-signal			the audio signal from which to compute features. Should be an N*1 array
-samplerate 		the samplerate of the signal we are working with.
-winlen 			the length of the analysis window in seconds. Default is 0.025s (25 milliseconds)
-winstep 		the step between successive windows in seconds. Default is 0.01s (10 milliseconds)
-numcep			the number of cepstrum to return, default 13
-nfilt			the number of filters in the filterbank, default 26.
-nfft			the FFT size. Default is 512
-lowfreq			lowest band edge of mel filters. In Hz, default is 0
-highfreq		highest band edge of mel filters. In Hz, default is samplerate/2
-preemph			apply preemphasis filter with preemph as coefficient. 0 is no filter. Default is 0.97
-ceplifter		apply a lifter to final cepstral coefficients. 0 is no lifter. Default is 22
-appendEnergy	if this is true, the zeroth cepstral coefficient is replaced with the log of the total frame energy.
-returns			A numpy array of size (NUMFRAMES by numcep) containing features. Each row holds 1 feature vector.
-=============	===========
+The default parameters should work fairly well for most cases.
+	
+=============	===========	==============
+Parameter 	Description	Default Value
+=============	===========	==============
+alpha			Parameter used in pre-emphasis filtering. Should be any value between 0 and 1.	0.95
+N 			Number of FFT points.	256
+fs 			Sampling frequency of stored audio file.	8000
+frame_dur		Duration of 1 speech frame	25 ms
+num_filters		Number of filters used in the Mel filterbank	23
+lower_freq		Lower frequency bound used for constructing filterbank	300
+upper_freq		Upper frequency bound used for constructing filterbank. Should be less than fs/2	3800
+=============	===========	================
 
 Dynamic Time Warping
 ======================
@@ -65,7 +55,3 @@ Dynamic Time Warping
 
 Reference
 =========
-sample english.wav obtained from::
-
-	wget http://voyager.jpl.nasa.gov/spacecraft/audio/english.au
-	sox english.au -e signed-integer english.wav
