@@ -5,7 +5,7 @@ import mfcc
 import dtw
 
 class hwDetector:
-	def __init__(self, samplingFrequency = 8000, framePeriod = 25e-3, hopPeriod = 10e-3, trainDir="./train_audio/",thresh=9.5):
+	def __init__(self, samplingFrequency = 8000, framePeriod = 25e-3, hopPeriod = 10e-3, trainDir="./train_audio/",thresh=6):
 		self.samplingFrequency = samplingFrequency
 		self.framePeriod = framePeriod
 		self.hopPeriod = hopPeriod
@@ -16,7 +16,6 @@ class hwDetector:
 		self.referenceMFCC = []
 		for file_name in os.listdir(trainDir):
 			if file_name.endswith(".wav"):
-				print(file_name)
 				(fs, data) = wv.read(trainDir + file_name)
 				num_frames = int(data.shape[0]/self.hopLength) - int(np.ceil(self.frameLength/self.hopLength))
 
@@ -25,13 +24,17 @@ class hwDetector:
 				for k in range(num_frames):
 					MFCC_MATRIX[:,k] = MFCC_calculator.compute_mfcc(data[k*self.hopLength : k*self.hopLength + self.frameLength])
 				self.referenceMFCC.append(MFCC_MATRIX)
-#		print(self.referenceMFCC[-1][:,0])	
-#		print(len(self.referenceMFCC))
+
+		DTW_calculator = dtw.DTW()
+		distance_list = [DTW_calculator.compute_distance(np.transpose(matrix),np.transpose(matrix2)) for matrix in self.referenceMFCC for matrix2 in self.referenceMFCC]
+		self.thresh = np.mean(np.array((distance_list)))*1.2
 
 	def distance(self, fileName):
 		DTW_calculator = dtw.DTW()
 		(fs, data) = wv.read(fileName)
 		num_frames = int(data.shape[0]/self.hopLength) - int(np.ceil(self.frameLength/self.hopLength))
+		if num_frames<=0:
+			return 10000
 
 		MFCC_calculator = mfcc.MFCC()
 		MFCC_MATRIX = np.empty([39, num_frames])
@@ -42,12 +45,9 @@ class hwDetector:
 		return distance_list
 
 	def isHotword(self,fileName):
-		distances = self.distance(fileName)
-		for dist in distances:
-			if(dist < self.thresh):
-				return True
+		distances = np.array(self.distance(fileName))
+		mean_dist = np.mean(distances)
+		if (mean_dist < self.thresh):
+			return True
 		return False
-
-hDetect = hwDetector()
-print(hDetect.isHotword("./fake_audio/fake2.wav"))
 
