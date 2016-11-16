@@ -1,6 +1,7 @@
 import sys
 import os
 
+os.mkdir('./train_audio')
 sys.path.append(os.path.abspath('.'))
 from hotword_detection import wordRecorder as wr
 import time
