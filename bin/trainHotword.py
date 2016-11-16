@@ -1,6 +1,9 @@
-import wordRecorder as wr
-import time
+import sys
 import os
+
+sys.path.append(os.path.abspath('.'))
+from hotword_detection import wordRecorder as wr
+import time
 
 wRec = wr.wordRecorder()
 filelist = [ f for f in os.listdir("./train_audio/") if f.endswith(".wav") ]
