@@ -3,8 +3,6 @@ HotWord Detection
 ======================
 
 This library provides functionality for detecting a hotword in given audio file using MFCC features and Dynamic Time Warping (DTW) pattern matching algorithm.
-If you are not sure what MFCCs are, and would like to know more have a look at this 
-`MFCC tutorial <http://www.practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/>`_
 
 Installation
 ============
@@ -28,16 +26,16 @@ Usage
 Supported features:
 
 - Mel Frequency Cepstral Coefficients
-- Choice of selecting any suitable hot word
+- Choice of selecting any suitable hot word through appropriate training paradigm
 - Supports variable sampling frequencies
-- Energy based Voice Activity Detector(VAD) used during recordings to remove extraneous noise
+- Amplitude based Voice Activity Detector(VAD) used during recordings to remove extraneous noise
 - Personalization using automatic DTW thresholding
 
 MFCC Features
 =============
 
-The default parameters should work fairly well for most cases.
-	
+MFCC vectors are used in this module since they are the most commonly extracted features used for speech recognition systems. 
+
 =============	===========	
 Parameter 	Description	
 =============	===========	
@@ -53,6 +51,10 @@ upper_freq	Upper frequency bound used for constructing filterbank. Should be les
 Dynamic Time Warping
 ======================
 
+Dynamic time warping (DTW) is an algorithm for measuring similarity between two temporal sequences which may vary in speed.
 
 Reference
 =========
+
+`MFCC tutorial <http://www.practicalcryptography.com/miscellaneous/machine-learning/guide-mel-frequency-cepstral-coefficients-mfccs/>`_
+`DTW Wiki <http://en.wikipedia.org/wiki/Dynamic_time_warping>`_
