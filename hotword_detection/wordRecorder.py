@@ -2,8 +2,6 @@ import pyaudio
 from array import array
 import wave,sys
 from struct import pack
-fsock = open('out.log', 'w')
-sys.stderr = fsock
 class wordRecorder:
 	def __init__(self, samplingFrequency = 8000, threshold = 14000):
 		self.samplingFrequency = samplingFrequency

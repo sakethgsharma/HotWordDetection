@@ -59,20 +59,3 @@ class MFCC:
 		else:
 			return self.coeffs[1:40]
 
-#temp = MFCC()
-#y = temp.compute_mfcc(np.random.random(200))
-#fbank = temp.generate_filter_bank()
-#print(np.shape(y))
-#print(y)
-def test_mfcc_first_coefficient():
-	temp = MFCC()
-	no_of_test = 100
-	input_matrix = np.random.random_sample((no_of_test,200))
-	
-	def first_coeff_greater_than_0(x):
-		assert(x>0)
-	
-	for i in range(no_of_test):
-		input_frame = input_matrix[i]
-		coeffs = temp.compute_mfcc(input_frame, include_dc=True)
-		yield first_coeff_greater_than_0, coeffs[0]

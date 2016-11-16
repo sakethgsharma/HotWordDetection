@@ -4,12 +4,6 @@ import math
 def euclideanDistance(a,b):
         return np.sqrt(np.abs(np.sum(np.dot(a,a) - np.dot(b,b))))
 
-def binaryDistance(a,b):
-        if(a != b):
-                return 1
-        else:
-                return 0
-
 class DTW:
         def __init__(self, distFunc=euclideanDistance):
                 self.distFunc = distFunc 
@@ -30,7 +24,7 @@ class DTW:
 
 	        for i in range(reference.shape[0]):
 	                for j in range(test.shape[0]):
-	                        cost =euclideanDistance(reference[i,:],test[j,:])
+	                        cost=euclideanDistance(reference[i,:],test[j,:])
 	                        r_index = i-1
 	                        c_index = j-1
 	                        if(r_index < 0):
