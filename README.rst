@@ -7,7 +7,7 @@ This library provides functionality for detecting a hotword in given audio file 
 Installation
 ============
 
-This `project is on pypi <https://pypi.python.org/pypi/python_speech_features>`_
+This `project is on pypi <https://pypi.python.org/pypi/hotword_detection/1.1>`_
 
 To install from pypi:: 
 
@@ -17,13 +17,22 @@ To install from pypi::
 From this repository::
 
 	git clone https://github.com/sakethgsharma/HotWordDetection.git
-	python setup.py install
 
 
 Usage
-=====
+======
 
-Supported features:
+*Example scripts*
+
+For training a hotword, run::
+	
+	python bin/trainHotword.py
+
+For testing, run::
+	
+	python bin/checkHotword.py
+
+*Supported features*
 
 - Mel Frequency Cepstral Coefficients
 - Choice of selecting any suitable hot word through appropriate training paradigm
