@@ -1,9 +1,10 @@
 import sys
 import os
 
-os.mkdir('./train_audio')
-sys.path.append(os.path.abspath('.'))
-from hotword_detection import wordRecorder as wr
+if not (os.path.exists('./train_audio')):
+	os.mkdir('./train_audio')
+sys.path.append(os.path.abspath('./hotword_detection'))
+import wordRecorder as wr
 import time
 
 wRec = wr.wordRecorder()
