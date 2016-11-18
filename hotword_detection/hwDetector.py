@@ -29,12 +29,11 @@ class hwDetector:
 	Documentation related to all methods in this class is described below.
 
 	"""
-	def __init__(self, samplingFrequency = 8000, framePeriod = 25e-3, hopPeriod = 10e-3, trainDir="./train_audio/",thresh=6):
+	def __init__(self, samplingFrequency = 8000, framePeriod = 25e-3, hopPeriod = 10e-3, trainDir="./train_audio/",thresh=1.2):
 		self.samplingFrequency = samplingFrequency
 		self.framePeriod = framePeriod
 		self.hopPeriod = hopPeriod
 		self.trainDir = trainDir
-		self.thresh = thresh
 		self.hopLength = int(samplingFrequency * hopPeriod)
 		self.frameLength = int(samplingFrequency * framePeriod)
 		self.referenceMFCC = []
@@ -51,7 +50,7 @@ class hwDetector:
 
 		DTW_calculator = dtw.DTW()
 		distance_list = [DTW_calculator.compute_distance(np.transpose(matrix),np.transpose(matrix2)) for matrix in self.referenceMFCC for matrix2 in self.referenceMFCC]
-		self.thresh = np.mean(np.array((distance_list)))*1.2
+		self.thresh = np.mean(np.array((distance_list)))*thresh
 
 	def distance(self, fileName):
 		"""
